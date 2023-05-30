@@ -13,8 +13,8 @@ let payload = {
     op : 2,
     d : {
         token : ENV.GW_TOKEN,
-        //  intents : 33280,
-         intents : 512,
+          intents : 33280,
+        //  intents : 512,
          properties : {
             os : "mac",
             browser : "chrome",
@@ -88,7 +88,7 @@ const initWebsocket = () => {
                 seq = s;
                 break;
         }
-
+        console.log("message Type:" + t);
         switch (t) {
             case "READY":
                 console.log("Discord gateway connection is ready!");
@@ -99,6 +99,7 @@ const initWebsocket = () => {
                 console.log("Discord gateway conenction resumed!");
                 break;
             case "MESSAGE_CREATE":
+                console.log(JSON.stringify(d));
                 let isNewMessage = (d.referenced_message == null && !d.hasOwnProperty("position"));
                 if (isNewMessage) {
                     let author = d.author.username;
