@@ -10,7 +10,7 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.send'];
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 const mailReceiver = ENV.MAIL_RECEIVER;
 const mailSubject = ENV.MAIL_SUBJECT ? ENV.MAIL_SUBJECT : 'Discord message response SLA violation!';
-const discordWebUrl = 'https://discord.com/channels/' + ENV.CHANNEL_ID;
+const discordWebUrl = 'https://discord.com/channels';
 
 function sendMail(msg) {
     startSend(msg).catch(error => console.error(error));
