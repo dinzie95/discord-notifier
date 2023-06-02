@@ -18,7 +18,6 @@ async function handleMessageCreateEvent(message){
     console.debug("Received message: " + id + " from user: " + author.username);
     if (id == channel_id) {
         let {parent_id, guild_id} = await getChannelInfo(channel_id);
-        console.debug("Parent id: " + parent_id + " Guild id: " + guild_id);
         // this check is required to filter the events from the channel of interest
        if (parent_id == ENV.CHANNEL_ID) {
             noReplyMap.set(id, {timestamp: timestamp, author: author.username, level: 0, id: id, 
@@ -28,7 +27,6 @@ async function handleMessageCreateEvent(message){
     } else {
         noReplyMap.delete(channel_id);
     }
-    console.debug("Current noReplyMap : " + JSON.stringify(noReplyMap.size));
 }
 
 function getChannelInfo(channel_id) {
@@ -53,7 +51,6 @@ function getChannelInfo(channel_id) {
             body += chunk;
         });
         res.on("end", () => {
-            console.log(JSON.parse(body));
             resolve(JSON.parse(body));
         });
     })
