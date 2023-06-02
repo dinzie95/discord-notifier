@@ -71,7 +71,7 @@ const initWebsocket = () => {
     ws.on("message", function incoming (data) {
         let p = JSON.parse(data);
         const {t,op, d, s} = p;
-
+        console.log('opcode: ' + op);
         switch (op) {
             case 10:
                 const { heartbeat_interval } = d;
