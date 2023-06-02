@@ -9,7 +9,7 @@ let l1 = ENV.ALERT2_MINS;
 let l2 = ENV.ALERT3_MINS;
 const alertWebhook = ENV.ALERT_CHAT_WEBHOOK;
 const escalationWebhook = ENV.ESCALATION_CHAT_WEBHOOK;
-const discordWebUrl = 'https://discord.com/channels/' + ENV.CHANNEL_ID;
+const discordWebUrl = 'https://discord.com/channels';
 
 const noReplyMap = new Map();
 
@@ -89,7 +89,7 @@ function sendAlerts(){
 
 const getChatMessage = (msg) => {
     return 'New Discord message from user: ' + msg.author + ', has not been answered for: ' + Math.floor(msg.delay/60/60/1000) + 
-        ' hours.\n'+ 'Link: ' + discordWebUrl + '/' + msg.guild_id;
+        ' hours.\n'+ 'Link: ' + discordWebUrl + '/' + msg.guild_id + '/' + ENV.CHANNEL_ID + '/threads/' + msg.id;
 }
 
 const sendChatAlert = (msg, webhookURL) => {
