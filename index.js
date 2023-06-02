@@ -60,7 +60,7 @@ const initWebsocket = () => {
     });
 
     ws.on("close", function close() {
-        if(wasReady) console.log("Gateway connection closed, trying to reconenct")
+        if(wasReady) console.log("Gateway connection closed, trying to reconenct.")
 
         setTimeout(() => {
             initWebsocket();
