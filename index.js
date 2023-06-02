@@ -1,11 +1,12 @@
-// import WebSocket from "ws";
 const WebSocket = require("ws");
+const fetch = import('node-fetch');
 const ENV = require("./config.json");
-// import ENV from "./config.json" assert {type : 'json'};
+const funcs = require("./functions.js");
 
 const baseUrl = "wss://gateway.discord.gg";
-let url = baseUrl, sessionId = "";
 
+let url = baseUrl, sessionId = "";
+let taskInterval = 0;;
 let ws;
 let interval = 0, seq = -1;
 
@@ -80,36 +81,26 @@ const initWebsocket = () => {
                     ws.send(JSON.stringify(payload))
                 }
                 heartbeat(interval);
-                // } else {
-                //     heartbeat(interval);
-                // }
                 break;
             case 0:
                 seq = s;
                 break;
         }
-        console.log("message Type:" + t);
+
         switch (t) {
             case "READY":
                 console.log("Discord gateway connection is ready!");
                 url = d.resume_gateway_url;
                 sessionId = d.sesson_id;
+                if (taskInterval == 0) {
+                    task = setInterval(funcs.sendAlerts, ENV.ALERT_INTERVAL_MINS*60*1000);
+                }
                 break;
             case "RESUMED":
                 console.log("Discord gateway conenction resumed!");
                 break;
             case "MESSAGE_CREATE":
-                console.log(JSON.stringify(d));
-                let isNewMessage = (d.referenced_message == null && !d.hasOwnProperty("position"));
-                if (isNewMessage) {
-                    let author = d.author.username;
-                    console.log(`New question by : ${author}`);
-                }
-                // console.log(">>>>>>>>>>>> new message, send notfication");
-                // let author = d.author.username;
-                // let content = d.content;
-                // let msg_channel_id = d.channel_id;
-                
+                funcs.handleMessageCreateEvent(d);      
                 break;
         }
     })
