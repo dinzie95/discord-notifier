@@ -37,6 +37,7 @@ const initWebsocket = () => {
         ws.close();
     }
 
+    console.log("Connecting to Discord gateway...");
     let wasReady = false;
     ws = new WebSocket(url + "/?v=10&encoding=json");
 
@@ -106,4 +107,5 @@ const initWebsocket = () => {
     })
 }
 
+console.log("Starting Discord integration.");
 initWebsocket();
