@@ -103,7 +103,10 @@ const   initWebsocket = () => {
                 break;
             case 7:
                 console.log("Discord gateway connection require a resume.")
-                initWebsocket();
+                url = baseUrl;
+                setTimeout(() => {
+                    initWebsocket();
+                }, 2500)
                 break;
             case 9:
                 if (d) {
