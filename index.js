@@ -9,6 +9,7 @@ let url = baseUrl, sessionId = "";
 let taskInterval = 0;;
 let ws;
 let interval = 0, seq = -1;
+let heartBeatTask;
 
 let payload = {
     op : 2,
@@ -93,17 +94,19 @@ const   initWebsocket = () => {
                 interval = heartbeat_interval;
                 wasReady = true;
 
-                if (url === baseUrl) {
+                // if (url === baseUrl) {
                     ws.send(JSON.stringify(payload))
+                // }
+                if (heartBeatTask) {
+                    clearInterval(heartBeatTask);
                 }
-                heartbeat(interval);
+                heartBeatTask = heartbeat(interval);
                 break;
             case 0:
                 seq = s;
                 break;
             case 7:
                 console.log("Discord gateway connection require a resume.")
-                url = baseUrl;
                 setTimeout(() => {
                     initWebsocket();
                 }, 2500)
