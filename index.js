@@ -31,7 +31,20 @@ const heartbeat = (ms) => {
     }, ms);
 };
 
-const initWebsocket = () => {
+const resume = () => {
+    const resumePayload = {
+        op: 6,
+        d: {
+            token: ENV.GW_TOKEN,
+            sessionId,
+            seq
+        }
+        
+    }
+    ws.send(JSON.stringify(resumePayload));
+};
+
+const   initWebsocket = () => {
     if (ws && ws.readystate !== 3) {
         console.log("closing Ws connection");
         ws.close();
@@ -61,7 +74,9 @@ const initWebsocket = () => {
     });
 
     ws.on("close", function close() {
-        if(wasReady) console.log("Gateway connection closed, trying to reconenct.")
+        if(wasReady){
+            console.log("Gateway connection closed, trying to reconenct.");
+        }
 
         setTimeout(() => {
             initWebsocket();
@@ -85,6 +100,20 @@ const initWebsocket = () => {
                 break;
             case 0:
                 seq = s;
+                break;
+            case 7:
+                console.log("Discord gateway connection require a resume.")
+                resume();
+                break;
+            case 9:
+                if (d) {
+                    console.log("Discord gateway connection require a resume.")
+                    resume();
+                } else {
+                    console.log("Discord gateway connection require a new identify.")
+                    url = baseUrl;
+                    ws.close();
+                }
                 break;
         }
 
