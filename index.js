@@ -78,11 +78,11 @@ const   initWebsocket = () => {
     ws.on("close", function close() {
         if(wasReady){
             console.log("Gateway connection closed, trying to reconenct.");
+            url = baseUrl;
             setTimeout(() => {
                 initWebsocket();
             }, 2500)
         }
-
         
     });
 
@@ -115,8 +115,10 @@ const   initWebsocket = () => {
                 break;
             case 9:
                 if (d) {
-                    console.log("Discord gateway connection require a resume.")
-                    resume();
+                    console.log("Discord gateway connection require a resume.");
+                    setTimeout(() => {
+                        initWebsocket();
+                    }, 2500);
                 } else {
                     console.log("Discord gateway connection require a new identify.")
                     url = baseUrl;
