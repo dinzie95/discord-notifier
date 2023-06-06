@@ -46,16 +46,17 @@ const resume = () => {
 };
 
 const   initWebsocket = () => {
+    let wasReady = false;
     if (ws && ws.readystate !== 3) {
         console.log("closing Ws connection");
         ws.close();
     }
 
     console.log("Connecting to Discord gateway...");
-    let wasReady = false;
     ws = new WebSocket(url + "/?v=10&encoding=json");
 
     ws.on("open", function open(){
+        console.log("Discord gateway connection opened.");
         if (url !== baseUrl) {
             const resumePayload = {
                 op: 6,
@@ -77,11 +78,12 @@ const   initWebsocket = () => {
     ws.on("close", function close() {
         if(wasReady){
             console.log("Gateway connection closed, trying to reconenct.");
+            setTimeout(() => {
+                initWebsocket();
+            }, 2500)
         }
 
-        setTimeout(() => {
-            initWebsocket();
-        }, 2500)
+        
     });
 
     ws.on("message", function incoming (data) {
@@ -106,10 +108,10 @@ const   initWebsocket = () => {
                 seq = s;
                 break;
             case 7:
-                console.log("Discord gateway connection require a resume.")
+                console.log("Discord gateway connection require a resume.");
                 setTimeout(() => {
                     initWebsocket();
-                }, 2500)
+                }, 2500);
                 break;
             case 9:
                 if (d) {
