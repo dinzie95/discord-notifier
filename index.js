@@ -94,9 +94,9 @@ const   initWebsocket = () => {
                 interval = heartbeat_interval;
                 wasReady = true;
 
-                // if (url === baseUrl) {
+                if (url === baseUrl) {
                     ws.send(JSON.stringify(payload))
-                // }
+                }
                 if (heartBeatTask) {
                     clearInterval(heartBeatTask);
                 }
