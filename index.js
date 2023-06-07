@@ -47,7 +47,7 @@ const resume = () => {
 
 const   initWebsocket = () => {
     let wasReady = false;
-    if (ws && ws.readystate !== 3) {
+    if (ws && (ws.readystate !== 3 || ws.readystate !== 2)) {
         console.log("closing Ws connection");
         ws.close();
     }
@@ -109,21 +109,13 @@ const   initWebsocket = () => {
                 break;
             case 7:
                 console.log("Discord gateway connection require a resume.");
-                setTimeout(() => {
-                    initWebsocket();
-                }, 2500);
+                url = baseUrl;
+                ws.close();
                 break;
             case 9:
-                if (d) {
-                    console.log("Discord gateway connection require a resume.");
-                    setTimeout(() => {
-                        initWebsocket();
-                    }, 2500);
-                } else {
-                    console.log("Discord gateway connection require a new identify.")
-                    url = baseUrl;
-                    ws.close();
-                }
+                console.log("Discord gateway connection require a new identify.")
+                url = baseUrl;
+                ws.close();
                 break;
         }
 
