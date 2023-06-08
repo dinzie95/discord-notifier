@@ -83,6 +83,8 @@ const   initWebsocket = () => {
             setTimeout(() => {
                 initWebsocket();
             }, 2500)
+        } else {
+            console.log("Gateway connection cloded.")
         }
         
     });
