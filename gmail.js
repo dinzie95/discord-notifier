@@ -11,13 +11,18 @@ const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 const mailReceiver = ENV.MAIL_RECEIVER;
 const mailSubject = ENV.MAIL_SUBJECT ? ENV.MAIL_SUBJECT : 'Discord message response SLA violation!';
 const discordWebUrl = 'https://discord.com/channels';
+const debug = ENV.DEBUG ? ENV.DEBUG : false;
 
 function sendMail(msg) {
     startSend(msg).catch(error => console.error(error));
 }
 
 async function startSend(msg) {
-    console.debug("Sending email for message: " + msg.id);
+    if (debug) {
+      console.debug("Sending email for message: " + msg.id 
+        + " to receiver: " + mailReceiver
+        + " with subject: " + mailSubject);
+    }
     const options = {
         to: mailReceiver,
         // cc: 'cc1@example.com, cc2@example.com',
@@ -43,7 +48,9 @@ async function startSend(msg) {
         raw: rawMessage,
       },
     });
-    console.debug('Email sent successfully: ', id);
+    if (debug) {
+        console.debug('Email sent successfully: ', id);
+    }
 }
 
 const encodeMessage = (message) => {

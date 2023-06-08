@@ -4,6 +4,7 @@ const ENV = require("./config.json");
 const funcs = require("./functions.js");
 
 const baseUrl = "wss://gateway.discord.gg";
+const debug = ENV.DEBUG ? ENV.DEBUG : false;
 
 let url = baseUrl, sessionId = "";
 let taskInterval = 0;;
@@ -48,7 +49,7 @@ const resume = () => {
 const   initWebsocket = () => {
     let wasReady = false;
     if (ws && (ws.readystate !== 3 || ws.readystate !== 2)) {
-        console.log("closing Ws connection");
+        console.log("Closing WS connection before reconnecting.");
         ws.close();
     }
 
@@ -89,7 +90,9 @@ const   initWebsocket = () => {
     ws.on("message", function incoming (data) {
         let p = JSON.parse(data);
         const {t,op, d, s} = p;
-        console.log('opcode: ' + op);
+        if (debug) {
+            console.log('opcode: ' + op + ' event: ' + t);
+        }
         switch (op) {
             case 10:
                 const { heartbeat_interval } = d;

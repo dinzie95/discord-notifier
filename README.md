@@ -22,6 +22,7 @@ A config.json and token.json file with the following elements should be added to
 2. ALERT2_MINS - Number of minutes the app should wait to send the second notification.
 3. ALERT3_MINS - Number of minutes the app should wait to send the third notification.
 4. ALERT_INTERVAL_MINS - In order to send alerts, app is checking the pending messages periodically. Define this time in minutes. Make sure it is less than the ALERT1_MINS. Each alert may be delayed by the number of minutes specify here (Worse case).
+5. DEBUG - This is an optional config with default value false. Set to true to enable debug.
 
 ### Discord configurations
 1. Get the desired Discord Forum's channel id and specify the CHANNEL_ID config.
