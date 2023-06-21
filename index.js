@@ -16,8 +16,8 @@ let payload = {
     op : 2,
     d : {
         token : ENV.GW_TOKEN,
-          intents : 33280,
-        //  intents : 512,
+        //   intents : 33280,
+         intents : 513,
          properties : {
             os : "mac",
             browser : "chrome",
@@ -58,18 +58,6 @@ const   initWebsocket = () => {
 
     ws.on("open", function open(){
         console.log("Discord gateway connection opened.");
-        if (url !== baseUrl) {
-            const resumePayload = {
-                op: 6,
-                d: {
-                    token: ENV.GW_TOKEN,
-                    sessionId,
-                    seq
-                }
-                
-            }
-            ws.send(JSON.stringify(resumePayload));
-        }
     });
 
     ws.on("error", function error(e) {
@@ -138,6 +126,12 @@ const   initWebsocket = () => {
                 break;
             case "MESSAGE_CREATE":
                 funcs.handleMessageCreateEvent(d);      
+                break;
+            case "MESSAGE_DELETE":
+                funcs.handleMessageDeleteEvent(d);
+                break;
+            case "THREAD_DELETE":
+                funcs.handleMessageDeleteEvent(d);
                 break;
         }
     })
