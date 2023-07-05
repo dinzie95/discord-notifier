@@ -37,6 +37,15 @@ async function handleMessageCreateEvent(message){
     }
 }
 
+function handleMessageDeleteEvent(message){
+    const { author, id, channel_id, timestamp } = message;
+    if (debug) {
+        console.debug(JSON.stringify(message));
+        console.debug("Received message delete event for channel ID: " + id);
+    }
+    noReplyMap.delete(channel_id);
+}
+
 function getChannelInfo(channel_id) {
     const https = require("https");
     let result;
@@ -129,5 +138,6 @@ const sendChatAlert = (msg, webhookURL) => {
 
 module.exports = { 
     handleMessageCreateEvent,
+    handleMessageDeleteEvent,
     sendAlerts
 };
