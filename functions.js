@@ -41,9 +41,9 @@ function handleMessageDeleteEvent(message){
     const { author, id, channel_id, timestamp } = message;
     if (debug) {
         console.debug(JSON.stringify(message));
-        console.debug("Received message delete event for channel ID: " + id);
+        console.debug("Received Thread delete event for channel ID: " + id);
     }
-    noReplyMap.delete(channel_id);
+    noReplyMap.delete(id);
 }
 
 function getChannelInfo(channel_id) {
