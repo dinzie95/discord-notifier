@@ -127,9 +127,6 @@ const   initWebsocket = () => {
             case "MESSAGE_CREATE":
                 funcs.handleMessageCreateEvent(d);      
                 break;
-            case "MESSAGE_DELETE":
-                funcs.handleMessageDeleteEvent(d);
-                break;
             case "THREAD_DELETE":
                 funcs.handleMessageDeleteEvent(d);
                 break;
