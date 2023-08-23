@@ -9,7 +9,7 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.send'];
 // The file token.json stores the user's access and refresh tokens.
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 const mailReceiver = ENV.MAIL_RECEIVER;
-const mailSubject = ENV.MAIL_SUBJECT ? ENV.MAIL_SUBJECT : 'Discord message response SLA violation!';
+const mailSubject = ENV.MAIL_SUBJECT ? ENV.MAIL_SUBJECT : 'Discord Message Needs Attention!';
 const discordWebUrl = 'https://discord.com/channels';
 const debug = ENV.DEBUG ? ENV.DEBUG : false;
 
@@ -62,7 +62,7 @@ const prepareBody = (msg) => {
     return '<p>New Discord message from user: ' + msg.author + ', has not been answered for: ' + delay 
         + ' hours.'+ '<br>'
         + 'Link: ' + discordWebUrl + '/' + msg.guild_id + '/' + ENV.CHANNEL_ID + '/threads/' + msg.id + '<br><br><br>'
-        + '<small>This is an auto generated email from the Discord notifier bot by Choreo PMM team.</small></p>';
+        + '<small>This is an auto generated email from the Discord Notifier Bot by Asgardeo CS team.</small></p>';
 }
 
 /**
