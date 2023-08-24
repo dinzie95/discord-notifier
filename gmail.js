@@ -59,7 +59,7 @@ const encodeMessage = (message) => {
 
 const prepareBody = (msg) => {
     delay = Math.floor(msg.delay/60/60/1000);
-    return '<p>New Discord message from user: ' + msg.author + ', has not been answered for: ' + delay 
+    return '<p>New Discord message from user: ' + msg.author + ',in help-asgardeo forum has not been answered for: ' + delay
         + ' hours.'+ '<br>'
         + 'Link: ' + discordWebUrl + '/' + msg.guild_id + '/' + ENV.CHANNEL_ID + '/threads/' + msg.id + '<br><br><br>'
         + '<small>This is an auto generated email from the Discord Notifier Bot by Asgardeo CS team.</small></p>';
