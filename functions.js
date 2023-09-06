@@ -1,20 +1,25 @@
+
 const { google } = require("googleapis");
 const ENV = require("./config.json");
 const email = require("./gmail.js");
 const { Console } = require("console");
 
+
 // Alert time levels in minutes. 
 let l0 = ENV.ALERT1_MINS;
-let l1 = ENV.ALERT2_MINS;
-let l2 = ENV.ALERT3_MINS;
+//let l1 = ENV.ALERT2_MINS;
+let l2 = ENV.ALERT2_MINS;
 const alertWebhook = ENV.ALERT_CHAT_WEBHOOK;
+const alertThread = ENV.ALERT_CHAT_THREAD_NAME;
 const escalationWebhook = ENV.ESCALATION_CHAT_WEBHOOK;
+const escalationThread = ENV.ESCALATION_CHAT_THREAD_NAME;
 const discordWebUrl = 'https://discord.com/channels';
 const debug = ENV.DEBUG ? ENV.DEBUG : false;
 
 const noReplyMap = new Map();
 
 async function handleMessageCreateEvent(message){
+console.log(message);
     const { author, id, channel_id, timestamp } = message;
     if (debug) {
         console.debug("Received message: " + id + " from user: " + author.username);
@@ -86,43 +91,122 @@ function sendAlerts(){
     for (const [key, msg] of noReplyMap.entries()) {
         const timestamp = new Date(msg.timestamp);
         let delay = now.getTime() - timestamp.getTime();
-        if ((delay >= l2*60*1000) && msg.level == 2) {
+
+//        Not using the below flow as Email sending module is not used ATM
+
+//        if ((delay >= l2*60*1000) && msg.level == 2) {
+//            if (debug) {
+//                console.debug("Sending escalation alert for message: " + msg.id);
+//            }
+//            msg.delay = delay;
+//            sendChatAlert(msg, escalationWebhook, escalationThread);
+//            // We no longer need to send alerts for this msg
+//            noReplyMap.delete(key);
+//        }
+//        else if ((delay >= l1*60*1000) && msg.level == 1) {
+//            if (debug) {
+//                console.debug("Sending Email alert for message: " + msg.id);
+//            }
+//            msg.delay = delay;
+//            email.sendMail(msg);
+//            msg.level = 2;
+//            noReplyMap.set(key,msg);
+//        }
+//        else if ((delay >= l0*60*1000) && msg.level == 0) {
+//            msg.delay = delay;
+//            if (debug) {
+//                console.debug("Sending chat alert for message: " + msg.id);
+//            }
+//            sendChatAlert(msg, alertWebhook, alertThread);
+//            msg.level = 1;
+//            noReplyMap.set(key,msg);
+//        }
+
+        if ((delay >= l2*60*1000) && msg.level == 1) {
             if (debug) {
                 console.debug("Sending escalation alert for message: " + msg.id);
             }
             msg.delay = delay;
-            sendChatAlert(msg, escalationWebhook);
+            sendChatAlert(msg, escalationWebhook, escalationThread);
             // We no longer need to send alerts for this msg
             noReplyMap.delete(key);
-        } else if ((delay >= l1*60*1000) && msg.level == 1) {
-            if (debug) {
-                console.debug("Sending Email alert for message: " + msg.id);
-            }
-            msg.delay = delay;
-            email.sendMail(msg);
-            msg.level = 2;
-            noReplyMap.set(key,msg);
-        } else if ((delay >= l0*60*1000) && msg.level == 0) {
+        }
+        else if ((delay >= l0*60*1000) && msg.level == 0) {
             msg.delay = delay;
             if (debug) {
                 console.debug("Sending chat alert for message: " + msg.id);
             }
-            sendChatAlert(msg, alertWebhook);
+            sendChatAlert(msg, alertWebhook, alertThread);
             msg.level = 1;
             noReplyMap.set(key,msg);
         }
     }
 }
 
-const getChatMessage = (msg) => {
-    return 'New Discord message from user: ' + msg.author + ', has not been answered for: ' + Math.floor(msg.delay/60/60/1000) + 
-        ' hours.\n'+ 'Link: ' + discordWebUrl + '/' + msg.guild_id + '/' + ENV.CHANNEL_ID + '/threads/' + msg.id;
+const getChatMessage = (msg, threadName) => {
+const data =
+{
+    "cards": [
+        {
+            "header": {
+                "title": "HELP-ASGARDEO",
+                "imageUrl": "https://icon-library.com/images/discord-icon-color/discord-icon-color-23.jpg",
+                "imageAltText": "Avatar for Notification"
+            },
+            "sections": [
+                {
+                    "widgets": [
+
+                        {
+                            "keyValue": {
+                                "topLabel": "Description",
+                                "content": "Discord Query"
+                            }
+                        },
+                        {
+                            "keyValue": {
+                                "topLabel": "Initiated By",
+                                "content": msg.author
+                            }
+                        }
+                    ]
+                },
+                {
+                    "widgets": [
+                        {
+                            "buttons": [
+                                {
+                                    "textButton": {
+                                        "text": " Open in Discord ",
+                                        "onClick": {
+                                            "openLink": {
+                                                "url": discordWebUrl + '/' + msg.guild_id + '/' + ENV.CHANNEL_ID + '/threads/' + msg.id
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "thread": {
+//        "name": "spaces/AAAAxS-6BjM/threads/g36pE-fHIIU"
+          "name": threadName
+
+    }
+
+    };
+return data;
 }
 
-const sendChatAlert = (msg, webhookURL) => {
-    const data = JSON.stringify({
-        'text': getChatMessage(msg),
-      });
+
+
+const sendChatAlert = (msg, webhookURL, threadName) => {
+console.log(msg);
+    const data = JSON.stringify(getChatMessage(msg,threadName));
       let resp;
       fetch(webhookURL, {
         method: 'POST',

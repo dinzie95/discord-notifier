@@ -1,0 +1,11 @@
+{
+  "GW_TOKEN":"MTE0MDQ5NzgzNzQ5MTIzMjc4OQ.GPhZxH.4OMuPpQGj7wD5ekpgPbUV8VZzlo1SREMjvnoJc",
+  "CHANNEL_ID":"1143467201542750218",
+  "ALERT1_MINS": 2,
+  "ALERT2_MINS": 3,
+  "ALERT_INTERVAL_MINS": 1,
+  "ALERT_CHAT_WEBHOOK" : "https://chat.googleapis.com/v1/spaces/AAAAwM60oYI/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=W5UfHnioYL-V27tmlFpWR3Eip6ywbXcZmXRmMqDTIsc",
+  "ALERT_CHAT_THREAD_NAME": "spaces/AAAAwM60oYI/threads/w1a0uJ1tFpI",
+  "ESCALATION_CHAT_WEBHOOK" : "https://chat.googleapis.com/v1/spaces/AAAAwM60oYI/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=smd93P3fzO3TBQj89b3cDzWSjXUD3eqPyoY-Wi6cKnQ",
+  "ESCALATION_CHAT_THREAD_NAME": "spaces/AAAAwM60oYI/threads/R7EEWPPmr5A"
+}
